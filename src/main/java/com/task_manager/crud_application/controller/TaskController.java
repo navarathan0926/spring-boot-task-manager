@@ -19,6 +19,17 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    @GetMapping("/all")
+    public List<Task> getAllTaskFromAPI(){
+       return taskService.callExternalApi();
+    }
+
+    @GetMapping("/fetch")
+    public ResponseEntity<List<Task>> getTasksFromAPI() {
+        List<Task> tasks = taskService.callExternalApi();
+        return ResponseEntity.ok(tasks);
+    }
+
     @GetMapping
     public List<Task> getAllTasks(){
         return taskService.getAllTasks();

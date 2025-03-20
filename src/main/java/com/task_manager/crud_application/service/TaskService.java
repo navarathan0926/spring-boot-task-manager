@@ -5,16 +5,27 @@ import com.task_manager.crud_application.exception.NotFoundException;
 import com.task_manager.crud_application.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository){
+    public TaskService(TaskRepository taskRepository, RestTemplate restTemplate){
         this.taskRepository = taskRepository;
+        this.restTemplate = restTemplate;
+    }
+
+    public List<Task> callExternalApi() {
+        String url = "https://jsonplaceholder.typicode.com/todos";
+//        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        Task[] tasks = restTemplate.getForObject(url, Task[].class);
+        return Arrays.asList(tasks);
     }
 
     public List<Task> getAllTasks(){

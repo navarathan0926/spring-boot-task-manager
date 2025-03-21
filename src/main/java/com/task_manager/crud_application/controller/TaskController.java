@@ -19,14 +19,20 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/all")
-    public List<Task> getAllTaskFromAPI(){
-       return taskService.callExternalApi();
+    @GetMapping("/taskById/{id}")
+    public ResponseEntity<Task> getExternalTaskById(@PathVariable Long id){
+        Task task =  taskService.callExternalTaskById(id);
+        if(task != null){
+            return ResponseEntity.ok(task);
+        }
+        return ResponseEntity.notFound().build();
     }
+
 
     @GetMapping("/fetch")
     public ResponseEntity<List<Task>> getTasksFromAPI() {
         List<Task> tasks = taskService.callExternalApi();
+        // need to check empty
         return ResponseEntity.ok(tasks);
     }
 
